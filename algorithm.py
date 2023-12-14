@@ -55,7 +55,8 @@ class EarleyParser:
     def predict(self, word: str) -> bool:
         self.rules_step = [
             {key: set() for key in self.key_list} for i in range(len(word) + 1)]
-        self.rules_step[0]['S'].add(Situation(Rule("S'", "S"), 0, 0))
+        self.rules_step[0][self.grammar.start].add(
+            Situation(Rule("S'", self.grammar.start), 0, 0))
         length_last_rules_step = 0
 
         while length_last_rules_step != self.len_steps(0):
@@ -72,7 +73,7 @@ class EarleyParser:
                 self.earley_complete(step)
                 self.earley_predict(step)
         
-        if Situation(Rule("S'", "S"), 1, 0) in self.rules_step[-1]['$']:
+        if Situation(Rule("S'", self.grammar.start), 1, 0) in self.rules_step[-1]['$']:
             return True
         else:
             return False
