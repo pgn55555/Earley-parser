@@ -1,20 +1,14 @@
-name: testing
-image: alpine
-
 on: [push]
+jobs:
+  testing:
+    runs-on: alpine
+    defaults:
+      run: apk update
+      run: apk add py3-pip
+      run: python3 -m venv venv
+      run: source venv/bin/activate
+      run: pip3 install -r requirements.txt
+    steps:
+      - name: Run tests
+        run: pytest
 
-before_script:
-    - apk update
-    - apk add py3-pip
-    - python3 -m venv venv
-    - source venv/bin/activate
-    - pip3 install -r requirements.txt
-
-stages:
-    - test
-
-TestCode:
-    stage: test
-
-    script:
-        - pytest
